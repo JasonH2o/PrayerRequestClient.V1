@@ -49,7 +49,7 @@ function BuildPrayerRequestCards(data){
 					'</div>'].join('\n'));					
 				//$('#prayerBoard').append(prayerRequestCard);
 				if(prayerRequestDetail.isCurrent){
-					$('#openPrayer').append(prayerRequestCard);					
+					$('#openPrayer').append(prayerRequestCard);										
 				}else{
 					$('#closePrayer').append(prayerRequestCard);
 				}
@@ -209,6 +209,7 @@ function ShowOpenPrayer(){
 function ShowClosePrayer(){
 	ClearPrayerRequestCards();
 	GetPrayerRequest(initialPagingNo);
+	$('#prayerBoard').append($('#closePrayer'));
 	$('#openPrayer').hide();
 	$('#closePrayer').show();	
 }
