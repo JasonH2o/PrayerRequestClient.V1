@@ -7,6 +7,7 @@ var isInitialLoad = true;
 
 $(document).ready(function (){
 	 GetPrayerRequest(initialPagingNo);
+	 $('#closePrayer').hide();
 //	 SetupPagination();
 });
 
@@ -31,8 +32,8 @@ function ClearModalInput(){
 }
 
 function BuildPrayerRequestCards(data){
-   totalPage = data.paging.pageCount;
-	$.each(data["data"], function(key,prayerRequestDetail){ 			
+    totalPage = data.paging.pageCount;
+	$.each(data["data"], function(key,prayerRequestDetail){ 
 	 			var prayerRequestCard = $([
 	 				'<div class="card border-info mb-4 prayerCard" style="max-width: 40rem;">',
 					  '<div class="card-header">' + prayerRequestDetail.date.substr(0,10) + '</div>',
@@ -45,13 +46,19 @@ function BuildPrayerRequestCards(data){
 					    		'<a href="javascript:void(0)" class="card-link" onclick="MarkPrayerRequestPrayed(\''+ prayerRequestDetail.id +'\')"><span class="badge badge-pill badge-dark" id = "prayed'+ prayerRequestDetail.id +'">Prayed</span></a>',
 					    		'<a href="javascript:void(0)" class="card-link" onclick="DeletePrayerRequest(\''+ prayerRequestDetail.id +'\')"><span class="badge badge-pill badge-dark">Delete</span></a>',
 						  	'</div>',
-					'</div>'].join('\n'));
-				$('#prayerBoard').append(prayerRequestCard);
+					'</div>'].join('\n'));					
+				//$('#prayerBoard').append(prayerRequestCard);
+				if(prayerRequestDetail.isCurrent){
+					$('#openPrayer').append(prayerRequestCard);					
+				}else{
+					$('#closePrayer').append(prayerRequestCard);
+				}
+				
 				prayerRequestIdToIsCurrent.push({key:prayerRequestDetail.id, value:prayerRequestDetail.isCurrent})
 	 		});
-	SetPrayIconStyle();
+	SetPrayIconStyle();	
 	if(isInitialLoad){
-		SetupPagination();
+		SetupPagination(data);
 		isInialLoad = false;
 	}
 }
@@ -65,7 +72,6 @@ function ClearPrayerRequestCards(){
 $(document).on("keypress", ":input:not(textarea)", function(event) {
     return event.keyCode != 13;
 });
-
 
 function SubmitPrayerReuqest(){
 	if(!$('#nameInput').val()){
@@ -117,7 +123,7 @@ function MarkPrayerRequestPrayed(id){
         type: 'PUT',
         data: { "id": -1, "name": $('#nameInput').val(), "request": $('#requestInput').val(),"date": $('#staticDate').val(),"isCurrent": "true"}
     }).done(function(data){
-    	ClearPrayerRequestCards();
+		ClearPrayerRequestCards();
     	BuildPrayerRequestCards(data);
     	RefreshPaging();
     	CloseModal();
@@ -178,6 +184,35 @@ function RefreshPaging(){
    });
 }
 
+function openCity(evt, cityName) {
+    var i, tabcontent, tablinks;
+    tabcontent = document.getElementsByClassName("tabcontent");
+    for (i = 0; i < tabcontent.length; i++) {
+        tabcontent[i].style.display = "none";
+    }
+    tablinks = document.getElementsByClassName("tablinks");
+    for (i = 0; i < tablinks.length; i++) {
+        tablinks[i].className = tablinks[i].className.replace(" active", "");
+    }
+    document.getElementById(cityName).style.display = "hide";
+	evt.currentTarget.className += " active";
+	
+}
+
+function ShowOpenPrayer(){
+	ClearPrayerRequestCards();
+	GetPrayerRequest(initialPagingNo);
+	$('#closePrayer').hide();
+	$('#openPrayer').show();
+}
+
+function ShowClosePrayer(){
+	ClearPrayerRequestCards();
+	GetPrayerRequest(initialPagingNo);
+	$('#openPrayer').hide();
+	$('#closePrayer').show();	
+}
+
 function SetupPagination(){	
 	console.log("Paging is here: "+ totalPage)
 
@@ -195,10 +230,10 @@ function SetupPagination(){
 //		hrefVariable: '{{number}}',
 
 // Text labels
-		first: 'First',
-		prev: 'Previous',
-		next: 'Next',
-		last: 'Last',
+		// first: 'First',
+		// prev: 'Previous',
+		// next: 'Next',
+		// last: 'Last',
 
 // carousel-style pagination
 		loop: false,
@@ -225,4 +260,17 @@ function SetupPagination(){
 		disabledClass: 'disabled'*/
 	});
 }
+
+// function SetupPagination2(data){
+// 	console.log("what's data: " + data["data"]);
+// 	$('#prayerBoardTab').pagination({
+// 		dataSource: [1,2,3,4,5,6],
+// 		pageSize: 5,
+// 		callback: function(data, pagination) {
+// 			// template method of yourself
+// 			$('#prayerBoardTab').append(BuildPrayerRequestCards(data));
+// 			//dataContainer.html(html);
+// 		}
+// 	})
+// }
 
