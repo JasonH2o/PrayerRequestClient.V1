@@ -52,6 +52,8 @@ function BuildPrayerRequestCards(data){
 					$('#openPrayer').append(prayerRequestCard);										
 				}else{
 					$('#closePrayer').append(prayerRequestCard);
+					$('#prayerBoard').append($('#closePrayer'));
+					$('#closePrayer').show();
 				}
 				
 				prayerRequestIdToIsCurrent.push({key:prayerRequestDetail.id, value:prayerRequestDetail.isCurrent})
@@ -184,20 +186,6 @@ function RefreshPaging(){
    });
 }
 
-function openCity(evt, cityName) {
-    var i, tabcontent, tablinks;
-    tabcontent = document.getElementsByClassName("tabcontent");
-    for (i = 0; i < tabcontent.length; i++) {
-        tabcontent[i].style.display = "none";
-    }
-    tablinks = document.getElementsByClassName("tablinks");
-    for (i = 0; i < tablinks.length; i++) {
-        tablinks[i].className = tablinks[i].className.replace(" active", "");
-    }
-    document.getElementById(cityName).style.display = "hide";
-	evt.currentTarget.className += " active";
-	
-}
 
 function ShowOpenPrayer(){
 	ClearPrayerRequestCards();
