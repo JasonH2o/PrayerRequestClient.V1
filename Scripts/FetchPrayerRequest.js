@@ -1,14 +1,12 @@
 var baseUrl = "http://localhost:54011/api/PrayerRequest";
 
 var prayerRequestIdToIsCurrent = [];
-var initialPagingNo = 0;
+var initialPagingNo = 1;
 var totalPage = 1;
 var isInitialLoad = true;
 
 $(document).ready(function (){
-	 GetPrayerRequest(initialPagingNo);
-	 $('#closePrayer').hide();
-//	 SetupPagination();
+	 GetPrayerRequest(initialPagingNo);	 
 });
 
 function AddNewPrayerRequest(){
@@ -32,7 +30,7 @@ function ClearModalInput(){
 }
 
 function BuildPrayerRequestCards(data){
-    totalPage = data.paging.pageCount;
+	//totalPage = data.paging.pageCount;
 	$.each(data["data"], function(key,prayerRequestDetail){ 
 	 			var prayerRequestCard = $([
 	 				'<div class="card border-info mb-4 prayerCard" style="max-width: 40rem;">',
@@ -52,17 +50,22 @@ function BuildPrayerRequestCards(data){
 					$('#openPrayer').append(prayerRequestCard);										
 				}else{
 					$('#closePrayer').append(prayerRequestCard);
-					$('#prayerBoard').append($('#closePrayer'));
-					$('#closePrayer').show();
+					// $('#prayerBoard').append($('#closePrayer'));
+					// $('#closePrayer').show();
 				}
 				
 				prayerRequestIdToIsCurrent.push({key:prayerRequestDetail.id, value:prayerRequestDetail.isCurrent})
 	 		});
-	SetPrayIconStyle();	
-	if(isInitialLoad){
-		SetupPagination(data);
-		isInialLoad = false;
-	}
+	SetPrayIconStyle();		
+	SetupPagination(data);
+	
+	// if(isInitialLoad){
+	// 	SetupPagination(data);
+	// 	isInialLoad = false;
+	// }
+	// else{
+	// 	RefreshPaging(data);
+	// }
 }
 
 function ClearPrayerRequestCards(){
@@ -76,6 +79,7 @@ $(document).on("keypress", ":input:not(textarea)", function(event) {
 });
 
 function SubmitPrayerReuqest(){
+	console.log("In submit prayer request method");
 	if(!$('#nameInput').val()){
 		$('#nameInput').val("Anonymous");	
 	}
@@ -84,9 +88,9 @@ function SubmitPrayerReuqest(){
         type: 'POST',
         data: { "id": -1, "name": $('#nameInput').val(), "request": $('#requestInput').val(),"date": $('#staticDate').val(),"isCurrent": "true"}
     }).done(function(data){
-    	ClearPrayerRequestCards();
+		ClearPrayerRequestCards();
+    	RefreshPaging();		
     	BuildPrayerRequestCards(data);
-    	RefreshPaging();
     	CloseModal();
     	ClearModalInput();
     });
@@ -109,7 +113,7 @@ function DeletePrayerRequest(id){
     			}).done(function(data){
     				ClearPrayerRequestCards();
     				BuildPrayerRequestCards(data);
-			    	RefreshPaging();
+			    	//RefreshPaging();
     				CloseModal();
     				ClearModalInput();
     			});
@@ -126,18 +130,22 @@ function MarkPrayerRequestPrayed(id){
         data: { "id": -1, "name": $('#nameInput').val(), "request": $('#requestInput').val(),"date": $('#staticDate').val(),"isCurrent": "true"}
     }).done(function(data){
 		ClearPrayerRequestCards();
+    	RefreshPaging();		
     	BuildPrayerRequestCards(data);
-    	RefreshPaging();
     	CloseModal();
     	ClearModalInput();
     	TogglePrayIconStyle(id);
     });	
 }
 
-function GetPrayerRequest(pageNo){
-	$.getJSON(baseUrl + "?pageNo=" + pageNo,function (data){
-	 		BuildPrayerRequestCards(data);
-	 });
+function GetPrayerRequest(pageNo, isCurrent = true){
+	// $.getJSON(baseUrl + "?pageNo=" + pageNo,function (data){
+	//  		BuildPrayerRequestCards(data);
+	//  });
+
+	 $.getJSON(baseUrl + "/" + pageNo + "/" + isCurrent,function (data){
+		BuildPrayerRequestCards(data);
+	});
 }
 
 function TogglePrayIconStyle(id){
@@ -164,31 +172,33 @@ function SetPrayIconStyle(){
 
 
 function RefreshPaging(){
-//	   $('#prayerBoardTab').twbsPagination('destroy');	
-//      $('.pagination').remove();
 
-	if($('.pagination').data("twbs-pagination")){
-   	$('.pagination').twbsPagination('destroy');
-   }
+	$('.pagination').remove();
+	$('#prayerBoardTab').removeData("twbs-pagination");
+	$('#prayerBoardTab').unbind("page");
+// 	if($('.pagination').data("twbs-pagination")){
+//    		$('.pagination').twbsPagination('destroy');
+//    	}
 
-   $('.pagination').twbsPagination({
-   	totalPages: totalPage,
-   	visiblePages: 5,
-   	startPage: 1,     
+//    $('.pagination').twbsPagination({
+//    	totalPages: data.paging.pageCount,
+//    	visiblePages: 5,
+//    	startPage: 1,     
    
-   // callback function
-		onPageClick: function (event, page) {		
-			ClearPrayerRequestCards();
-			GetPrayerRequest(page);
-    		CloseModal();
-    		ClearModalInput();  
-    		}           
-   });
+//    // callback function
+// 		onPageClick: function (event, page) {		
+// 			ClearPrayerRequestCards();
+// 			GetPrayerRequest(page, data["data"][0].isCurrent);
+//     		CloseModal();
+//     		ClearModalInput();  
+//     		}           
+//    });
 }
 
 
 function ShowOpenPrayer(){
 	ClearPrayerRequestCards();
+	RefreshPaging();	
 	GetPrayerRequest(initialPagingNo);
 	$('#closePrayer').hide();
 	$('#openPrayer').show();
@@ -196,17 +206,18 @@ function ShowOpenPrayer(){
 
 function ShowClosePrayer(){
 	ClearPrayerRequestCards();
-	GetPrayerRequest(initialPagingNo);
-	$('#prayerBoard').append($('#closePrayer'));
+	RefreshPaging();
+	GetPrayerRequest(initialPagingNo, isCurrent = false);
 	$('#openPrayer').hide();
 	$('#closePrayer').show();	
 }
 
-function SetupPagination(){	
-	console.log("Paging is here: "+ totalPage)
+function SetupPagination(data){
+	var totalPageForData = data.paging.pageCount;
+	console.log("Paging is here: "+ totalPageForData)
 
 	$('#prayerBoardTab').twbsPagination({
-		totalPages: totalPage,
+		totalPages: totalPageForData,
 // the current page that show on start
 		startPage: 1,
 
@@ -230,7 +241,7 @@ function SetupPagination(){
 // callback function
 		onPageClick: function (event, page) {		
 		ClearPrayerRequestCards();
-		GetPrayerRequest(page);
+		GetPrayerRequest(page, data["data"][0].isCurrent);
     	CloseModal();
     	ClearModalInput();
 		
@@ -250,16 +261,4 @@ function SetupPagination(){
 	});
 }
 
-// function SetupPagination2(data){
-// 	console.log("what's data: " + data["data"]);
-// 	$('#prayerBoardTab').pagination({
-// 		dataSource: [1,2,3,4,5,6],
-// 		pageSize: 5,
-// 		callback: function(data, pagination) {
-// 			// template method of yourself
-// 			$('#prayerBoardTab').append(BuildPrayerRequestCards(data));
-// 			//dataContainer.html(html);
-// 		}
-// 	})
-// }
 

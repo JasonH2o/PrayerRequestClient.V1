@@ -11,7 +11,7 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/7.20.6/sweetalert2.all.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/twbs-pagination/1.4.1/jquery.twbsPagination.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/twbs-pagination/1.4.2/jquery.twbsPagination.min.js"></script>
   <script src="Scripts/FetchPrayerRequest.js"></script> 
 </head>
 
@@ -25,9 +25,9 @@
           <div class="collapse navbar-collapse" id="navbarResponsive">
             <ul class="navbar-nav">
               
-              <li class="nav-item">
-                <a class="nav-link" href="#" onclick="AddNewPrayerRequest()">Add a Prayer</a>
-              </li>
+              <!-- <li class="nav-item">
+                <a class="nav-link" data-toggle="tab" href="#newPrayerRequestCard" onclick="AddNewPrayerRequest()">Add a Prayer</a>
+              </li> -->
               <li class="nav-item">
                 <a class="nav-link" href="./About.html" >About</a>
               </li>            
@@ -75,10 +75,13 @@
                 </div> -->
             <ul class="nav nav-tabs">
               <li class="nav-item">
-                <a class="nav-link active" data-toggle="tab" href="#openPrayer">Home</a>
+                <a class="nav-link active" data-toggle="tab" href="#openPrayer" onclick="ShowOpenPrayer()">Open Prayer</a>
               </li>
               <li class="nav-item">
-                <a class="nav-link" data-toggle="tab" href="#closePrayer">Profile</a>
+                <a class="nav-link" data-toggle="tab" href="#closePrayer" onclick="ShowClosePrayer()">Prayed</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" data-toggle="tab" onclick="AddNewPrayerRequest()" onmouseover="" style="cursor: pointer">Add a prayer</a>
               </li>
     
             </ul>
