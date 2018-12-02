@@ -111,11 +111,16 @@ function DeletePrayerRequest(id){
         			url: baseUrl + '/' + id,
         			type: 'DELETE',
     			}).done(function(data){
-    				ClearPrayerRequestCards();
-    				BuildPrayerRequestCards(data);
-			    	//RefreshPaging();
-    				CloseModal();
-    				ClearModalInput();
+					if(data["data"][0].isCurrent){
+						ShowOpenPrayer();
+					}else{
+						ShowClosePrayer();
+					}
+    				// ClearPrayerRequestCards();
+    				// BuildPrayerRequestCards(data);
+			    	// //RefreshPaging();
+    				// CloseModal();
+    				// ClearModalInput();
     			});
         }/* else {
             swal("Cancelled", "Saving has been cancelled.", "error");            
@@ -129,11 +134,17 @@ function MarkPrayerRequestPrayed(id){
         type: 'PUT',
         data: { "id": -1, "name": $('#nameInput').val(), "request": $('#requestInput').val(),"date": $('#staticDate').val(),"isCurrent": "true"}
     }).done(function(data){
-		ClearPrayerRequestCards();
-    	RefreshPaging();		
-    	BuildPrayerRequestCards(data);
-    	CloseModal();
-    	ClearModalInput();
+		if(data["data"][0].isCurrent){
+			ShowOpenPrayer();
+		}else{
+			ShowClosePrayer();
+		}
+
+		// ClearPrayerRequestCards();
+    	// RefreshPaging();		
+    	// BuildPrayerRequestCards(data);
+    	// CloseModal();
+    	// ClearModalInput();
     	TogglePrayIconStyle(id);
     });	
 }
