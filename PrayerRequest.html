@@ -50,7 +50,7 @@
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" data-toggle="tab" href="#newPrayerRequestCard" onclick="AddNewPrayerRequest()" onmouseover="" style="cursor: pointer">Add a prayer</a>
-                        </li>
+                        </li>                        
                     </ul>
                     <div id="myTabContent" class="tab-content">
                         <div class="tab-pane fade show active" id="openPrayer">
@@ -75,34 +75,30 @@
                     </button>
                 </div>
                 <div class="modal-body">
-                    <form id="prayerRequestForm">
-                        <fieldset>
-                            <div class="btn-toolbar justify-content-between" role="toolbar" aria-label="Toolbar with button groups">
-                                <div class="btn-group" role="group" aria-label="First group">
-                                    <legend class="col-xs-6">Prayer</legend>
-                                </div>
-                                <div class="input-group">
-                                    <button class="btn btn-primary col-xs-6" onclick="SubmitPrayerReuqest()">Submit</button>
-                                </div>
-                            </div>
-                            <div class="form-group row" style="display: none;">
-                                <label for="staticDate" class="col-sm-2 col-form-label">Date: </label>
-                                <div class="col-sm-10">
-                                    <input type="text" class="form-control-plaintext" id="staticDate">
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <label for="nameInput">Name</label>
-                                <input type="text" class="form-control" id="nameInput" placeholder="Enter Name">
-                            </div>
-
-                            <div class="form-group">
-                                <label for="requestInput">Prayer request: </label>
-                                <textarea class="form-control" id="requestInput" rows="3"></textarea>
-                                <small id="emailHelp" class="form-text text-muted">We'll never share your prayer content with anyone else outside of H2o fellowship.</small>
-                            </div>
-                        </fieldset>
-                    </form>
+                    <div class="btn-toolbar justify-content-between" role="toolbar" aria-label="Toolbar with button groups">
+                        <div class="btn-group" role="group" aria-label="First group">
+                            <legend class="col-xs-6">Prayer</legend>
+                        </div>
+                        <div class="input-group">
+                            <button class="btn btn-primary col-xs-6" onclick="SubmitPrayerReuqest()">Submit</button>
+                        </div>
+                    </div>
+                    <div class="form-group row" style="display: none;">
+                        <label for="staticDate" class="col-sm-2 col-form-label">Date: </label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control-plaintext" id="staticDate">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="nameInput">Name</label>
+                        <input type="text" class="form-control" id="nameInput" placeholder="Enter Name">
+                    </div>
+                
+                    <div class="form-group">
+                        <label for="requestInput">Prayer request: </label>
+                        <textarea class="form-control" id="requestInput" rows="3"></textarea>
+                        <small id="emailHelp" class="form-text text-muted">We'll never share your prayer content with anyone else outside of H2o fellowship.</small>
+                    </div>
                 </div>
             </div>
         </div>
