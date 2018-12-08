@@ -87,9 +87,10 @@ function SubmitPrayerReuqest(){
         type: 'POST',
         data: { "id": -1, "name": $('#nameInput').val(), "request": $('#requestInput').val(),"date": $('#staticDate').val(),"isCurrent": "true"}
     }).done(function(data){
-		CloseModal();
-		ClearModalInput();
-		ShowOpenPrayer();
+		if(!data.error) location.reload(true);
+		// CloseModal();
+		// ClearModalInput();
+		// ShowOpenPrayer();
 		// ClearPrayerRequestCards();
     	// RefreshPaging();		
     	// BuildPrayerRequestCards(data);
