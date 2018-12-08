@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf=8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Prayer Board</title>
+
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootswatch/4.1.1/sketchy/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/7.20.6/sweetalert2.all.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/twbs-pagination/1.4.2/jquery.twbsPagination.min.js"></script>
+  <script src="Scripts/FetchPrayerRequest.js"></script>
+  <script>
+      window.fbAsyncInit = function () {
+        FB.init({
+          appId: '357458545051617',
+          cookie: true,
+          xfbml: true,
+          version: 'v3.2'
+        });
+  
+        FB.AppEvents.logPageView();
+  
+      };
+  
+      (function (d, s, id) {
+        var js, fjs = d.getElementsByTagName(s)[0];
+        if (d.getElementById(id)) { return; }
+        js = d.createElement(s); js.id = id;
+        js.src = "https://connect.facebook.net/en_US/sdk.js";
+        fjs.parentNode.insertBefore(js, fjs);
+      }(document, 'script', 'facebook-jssdk'));
+        
+    </script>
+</head>
+
+<body id="mainDiv">
+
+  <script>
+            function login() {
+          FB.login(function (response) {
+            if (!response.authResponse) {
+            } else {
+
+            }
+            // handle the response
+            console.log(response);
+            var status = FB.getLoginStatus();
+
+            console.log(status);
+
+          }, { fields: 'groups_access_member_info, id, email, name' });
+        }
+
+        function logout() {
+          FB.logout(function (response) {
+            // user is now logged out
+          });
+        }
+  </script>
+  <div class="navbar navbar-expand-lg fixed-top navbar-light bg-light">
+    <div class="container">
+      <a href="./Index.html" class="navbar-brand">H2O Fellowship</a>
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive"
+        aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarResponsive">
+        <ul class="navbar-nav">
+
+          <!-- <li class="nav-item">
+                <a class="nav-link" data-toggle="tab" href="#newPrayerRequestCard" onclick="AddNewPrayerRequest()">Add a Prayer</a>
+              </li> -->
+          <li class="nav-item">
+            <a class="nav-link" href="./About.html">About</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  <!-- <div class="container">
+    <ul class="nav nav-tabs">
+      <li class="nav-item">
+        <a class="nav-link active show" data-toggle="tab" href="#prayerBoardTab">Home</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" data-toggle="tab" href="#addPrayer" onclick="AddNewPrayerRequest()">Add a Prayer</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" data-toggle="tab" href="#about">About</a>
+      </li>
+    </ul>
+
+    <div class="tab-content">
+      <div class="tab-pane fade" id="about">
+        <p>About this app</p>
+      </div>
+
+    </div> -->
+  <div class="tab-content">
+    <div class="tab-pane fade active show" id="prayerBoardTab">
+      <div class="container">
+        <div class="tab-pane fade show active jumbotron" id="prayerBoard">
+            <button onclick="login();">Login Facebook</button>
+            <br>            
+            <button onclick="logout();">Logout from Facebook</button>
+          <h1 class="display-3">H2O Prayer Board</h1>
+          <p class="lead">This is a place to write down our prayer requests. Let's pray and support each other!!!</p>
+          <hr class="my-4">
+          <!-- <div>
+                  <ul class="nav nav-tabs">
+                    <li class="nav-item">                  
+                      <button class="tablinks btn btn-outline-secondary" onclick="ShowOpenPrayer()">Open Prayer</button>                  
+                    </li>
+                    <li class="nav-item">
+                        <button class="tablinks btn btn-outline-secondary" onclick="ShowClosePrayer()">Prayed</button>  
+                    </li>
+                  </ul>
+                  <div class="tab-content" id="openPrayer" />
+                  <div class="tab-content" id="closePrayer"/>
+                </div> -->
+          <ul class="nav nav-tabs">
+            <li class="nav-item">
+              <a class="nav-link active" data-toggle="tab" href="#openPrayer" onclick="ShowOpenPrayer()">Open Prayer</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" data-toggle="tab" href="#closePrayer" onclick="ShowClosePrayer()">Prayed</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" data-toggle="tab" href="#newPrayerRequestCard" onclick="AddNewPrayerRequest()" onmouseover="" style="cursor: pointer">Add a prayer</a>
+            </li>
+
+          </ul>
+          <div id="myTabContent" class="tab-content">
+            <div class="tab-pane fade show active" id="openPrayer">
+            </div>
+            <div class="tab-pane fade" id="closePrayer">
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  </div>
+
+
+  <div class="modal" id="newPrayerRequestCard" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Add a Prayer</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close" onclick="CloseModal()">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <form id="prayerRequestForm">
+            <fieldset>
+              <legend>Prayer</legend>
+              <div class="form-group row">
+                <label for="staticDate" class="col-sm-2 col-form-label">Date: </label>
+                <div class="col-sm-10">
+                  <input type="text" class="form-control-plaintext" id="staticDate">
+                </div>
+              </div>
+              <div class="form-group">
+                <label for="nameInput">Name</label>
+                <input type="text" class="form-control" id="nameInput" placeholder="Enter Name">
+              </div>
+
+              <div class="form-group">
+                <label for="requestInput">Prayer request: </label>
+                <textarea class="form-control" id="requestInput" rows="3"></textarea>
+                <small id="emailHelp" class="form-text text-muted">We'll never share your prayer content with anyone else outside of H2o fellowship.</small>
+              </div>
+
+              <button class="btn btn-primary" onclick="SubmitPrayerReuqest()">Submit</button>
+            </fieldset>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+
+</html>

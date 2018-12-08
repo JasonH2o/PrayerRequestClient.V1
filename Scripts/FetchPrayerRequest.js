@@ -1,4 +1,4 @@
-var baseUrl = "http://localhost:54011/api/PrayerRequest";
+var baseUrl = "http://weappster-001-site1.atempurl.com/api/PrayerRequest";
 
 var prayerRequestIdToIsCurrent = [];
 var initialPagingNo = 1;
@@ -270,6 +270,54 @@ function SetupPagination(data){
 		activeClass: 'active',
 		disabledClass: 'disabled'*/
 	});
+
+	//-------- FaceBook Authentication service handling code ----------	
+	// This method is invoked when you press the button
+	function loginWithFacebook() {
+		logLine("Logging in via Facebook...");
+
+		// Standart practice: make call to FB.login.
+		// This will show Facebook popup window. To prevent browsers from locking it,
+		// always make sure to call it from Button click event
+		FB.login(function(response){
+			if(!response.authResponse){
+				logLine("Problem authenticating via Facebook!");
+			} else {
+				var status = FB.getLoginStatus();
+
+				console.log(status);
+			}
+		});
+	}
+
+	function logLine(message) {
+		var textnode = document.createTextNode(message);
+		document.body.appendChild(textnode);
+		var br = document.createElement("br");
+		document.body.appendChild(br);
+	}
+
+	function login() {
+		FB.login(function(response) {
+			if(!response.authResponse){
+				logLine("Problem authenticating via Facebook!");
+			}else{
+
+			}
+		// handle the response
+		console.log(response);
+		var status = FB.getLoginStatus();
+
+				console.log(status);
+
+		}, {scope: 'read_stream,publish_stream,publish_actions,read_friendlists'});            
+	}
+
+	function logout() {
+		FB.logout(function(response) {
+		  // user is now logged out
+		});
+	}
 }
 
 
