@@ -20,7 +20,7 @@
           appId: '357458545051617',
           cookie: true,
           xfbml: true,
-          version: 'v3.2'
+          version: 'v2.12'
         });
   
         FB.AppEvents.logPageView();
@@ -40,27 +40,41 @@
 
 <body id="mainDiv">
 
-  <script>
-            function login() {
-          FB.login(function (response) {
-            if (!response.authResponse) {
-            } else {
+  <script>    
+    var whiteList = ['Jason Liu', 'Ivy LQ', 'Lyvan Li', 'Jenny Chung', 'Jia-Li Zhao', 'Ben Kwan', 'David Liang', 'Simion Cheng', 'Janice Chen', 
+                    'Ck Fang', 'Xinlong Li', 'Tingting Zhang', 'NoboBee Liang', 'Mankit Yuen', 'Joan Leung', 'Brian A Lau', 'Precious Anne Lee', 
+                    'Kapo Chan', 'Carly Chan', 'Jolie Ngan', 'Jia Lynn Liu', 'Jaylen Chen', 'Felix Chan', 'Ernest Ng', 'Melody Cam', 'Lei Lei Zhen',
+                    'Michael Zhe Cao', 'Jeff Haolin Deng', 'Edwina Leung', 'Johnson Chen', 'YingTu Chen', 'Cecilia Wong', 'Christina Mai', 'Au Yeung Kwan Ho', 
+                    'Mike Yan', 'Cathy Cho', 'Fannie Tong', 'Vincent Jiawen Chen', 'Kaixin Luo', 'Lynette Huang', 'Shelly Chen', 'Karen Zhang', 'Haozheng Chen', 
+                    'Jinghui Han', 'Joanna Chan', 'Cara Huang', 'Mingfa Chen', 'Ivan Chen', 'Annie Chen', 'Katy Wong', 'Linda Yuan', 'Daniel Huang', 'Sue Li'];
+    function login() {      
+      // perms list https://developers.facebook.com/docs/facebook-login/permissions#reference-default
+      FB.login(function (response) {
+                if (response.status === 'connected') {
+                    var url = '/me?fields=id,name,email';
+                    FB.api(url, function (response) {
+                        if(whiteList.includes(response.name)){
+                          alert("log in successfully");
+                          console.log('id:' + response.id + ' name:' + response.name + ' email: ' + response.email)
+                        }else{
+                          alert("User is not in H2o + 2 Fellowship Group");
+                        }                  
+                    });
+                }
+                else {
+                    alert("User did not login successfully");
+                }
+            }, { scope: 'email' }); /* perms changed to scope */
+    }
+    
 
-            }
-            // handle the response
-            console.log(response);
-            var status = FB.getLoginStatus();
+    function logout() {
+      FB.logout(function (response) {
+        // user is now logged out
+      });
 
-            console.log(status);
-
-          }, { fields: 'groups_access_member_info, id, email, name' });
-        }
-
-        function logout() {
-          FB.logout(function (response) {
-            // user is now logged out
-          });
-        }
+      
+    }
   </script>
   <div class="navbar navbar-expand-lg fixed-top navbar-light bg-light">
     <div class="container">
@@ -85,9 +99,8 @@
         <div class="tab-pane fade show active jumbotron" id="prayerBoard">
             
           <h1 class="display-3">H2O Prayer Board</h1>
-          <button onclick="login();">Login Facebook</button>
-          <br>            
-          <button onclick="logout();">Logout from Facebook</button>          
+          <button class="btn btn-primary col-xs-6"  onclick="login();">Login Facebook</button>
+                    
         </div>
       </div>
     </div>

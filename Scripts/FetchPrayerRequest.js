@@ -1,4 +1,4 @@
-var baseUrl = "http://weappster-001-site1.atempurl.com/api/PrayerRequest";
+var baseUrl = "https://h2ofellowship.com/api/PrayerRequest";
 
 var prayerRequestIdToIsCurrent = [];
 var initialPagingNo = 1;
